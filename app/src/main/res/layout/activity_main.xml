@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:padding="16dp">
+
+    <!-- 显示时间的 TextView -->
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="时间："
+        android:textSize="20sp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- 输入体重 -->
+    <EditText
+        android:id="@+id/edtWeight"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="请输入体重 (kg)"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toBottomOf="@id/tvTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="12dp"
+        android:layout_marginTop="16dp" />
+
+    <!-- 输入身高 -->
+    <EditText
+        android:id="@+id/edtHeight"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="请输入身高 (m)"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toBottomOf="@id/edtWeight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="12dp"
+        android:layout_marginTop="16dp" />
+
+    <!-- 计算按钮 -->
+    <Button
+        android:id="@+id/btnCalculate"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="计算BMI"
+        app:layout_constraintTop_toBottomOf="@id/edtHeight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:onClick="calculateBMI" />
+
+    <!-- 结果显示 -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="结果："
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/btnCalculate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- 健康建议显示 -->
+    <TextView
+        android:id="@+id/tvAdvice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="健康建议："
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/tvResult"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
