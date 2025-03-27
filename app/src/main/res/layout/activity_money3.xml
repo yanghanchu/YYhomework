@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="24dp"
+    tools:context=".MainActivity2">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Config Rates"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 美元汇率输入 -->
+    <EditText
+        android:id="@+id/editDollar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Dollar Rate"
+        android:textSize="24sp"
+        android:layout_marginBottom="8dp"
+        android:inputType="numberDecimal" />
+
+    <!-- 欧元汇率输入 -->
+    <EditText
+        android:id="@+id/editEuro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Euro Rate"
+        android:textSize="24sp"
+        android:layout_marginBottom="8dp"
+        android:inputType="numberDecimal" />
+
+    <!-- 韩元汇率输入 -->
+    <EditText
+        android:id="@+id/editWon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Won Rate"
+        android:textSize="24sp"
+        android:layout_marginBottom="16dp"
+        android:inputType="numberDecimal" />
+
+    <!-- 保存按钮 -->
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:text="SAVE" />
+
+</LinearLayout>

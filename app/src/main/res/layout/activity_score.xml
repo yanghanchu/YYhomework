@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="24dp"
+    tools:context=".Score">
+
+    <!-- 顶部标题 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="CourtCounter"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- 双队布局 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Team A -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Team A"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/scoreTeamA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="0"
+                android:textColor="#000000"
+                android:textSize="48sp" />
+
+            <Button
+                android:id="@+id/buttonA3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="+3 POINTS" />
+
+            <Button
+                android:id="@+id/buttonA2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="+2 POINTS" />
+            <Button
+                android:id="@+id/buttonA1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 POINTS" />
+
+
+        </LinearLayout>
+
+        <!-- 中间分割线 -->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="#CCCCCC" />
+
+        <!-- Team B -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Team B"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/scoreTeamB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="0"
+                android:textColor="#000000"
+                android:textSize="48sp" />
+
+            <Button
+                android:id="@+id/buttonB3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="+3 POINTS" />
+
+            <Button
+                android:id="@+id/buttonB2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="+2 POINTS" />
+
+            <Button
+                android:id="@+id/buttonB1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 POINTS" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- RESET 按钮 -->
+    <Button
+        android:id="@+id/buttonReset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="RESET" />
+</LinearLayout>

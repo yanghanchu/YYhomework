@@ -1,18 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapplicationx429as">
 
     <application
-        android:label="BMI Calculator"
         android:theme="@style/Theme.AppCompat">
 
+        <!-- Money 为启动页 -->
         <activity
-            android:name=".MainActivity"
+            android:name=".Money"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- MainActivity2 用于配置或其它跳转，不作为启动页 -->
+        <activity
+            android:name=".MainActivity2"
+            android:exported="true" />
+
+        <!-- Score 页面 -->
+        <activity
+            android:name=".Score"
+            android:exported="true" />
+
+        <!-- MainActivity 页面 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
 
     </application>
 

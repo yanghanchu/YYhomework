@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    tools:context=".Money">
+
+    <!-- 输入框：输入人民币金额 -->
+    <EditText
+        android:id="@+id/editTextRMB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Input RMB"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 结果显示区 -->
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- 美元按钮 -->
+    <Button
+        android:id="@+id/buttonDollar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DOLLAR"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- 欧元按钮 -->
+    <Button
+        android:id="@+id/buttonEuro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="EURO"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- 韩元按钮 -->
+    <Button
+        android:id="@+id/buttonWon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="WON"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- 配置按钮：跳转到配置页面 -->
+    <Button
+        android:id="@+id/buttonConfig"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go"
+        android:backgroundTint="#9C27B0"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>
