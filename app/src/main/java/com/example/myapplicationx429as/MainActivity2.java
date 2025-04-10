@@ -17,7 +17,6 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_money3); // 加载 activity_money3.xml
 
-        // 1. 获取控件引用
         editDollar = findViewById(R.id.editDollar);
         editEuro = findViewById(R.id.editEuro);
         editWon = findViewById(R.id.editWon);
