@@ -2,105 +2,92 @@ package com.example.myapplicationx429as;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class Money extends AppCompatActivity {
 
     private EditText editTextRMB;
     private TextView textViewResult;
-    private Button buttonDollar, buttonEuro, buttonWon, buttonConfig;
+    private Button buttonDollar, buttonEuro, buttonWon;
 
-    // 定义汇率
-    private float dollarRate = 0.15f;  // 默认：1 RMB = 0.15 USD
-    private float euroRate = 0.13f;    // 默认：1 RMB = 0.13 EUR
-    private float wonRate = 165f;      // 默认：1 RMB = 165 WON
-
-    private static final int REQUEST_CODE_CONFIG = 1;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 加载布局：activity_money2.xml
         setContentView(R.layout.activity_money2);
 
         editTextRMB = findViewById(R.id.editTextRMB);
         textViewResult = findViewById(R.id.textViewResult);
-
         buttonDollar = findViewById(R.id.buttonDollar);
         buttonEuro = findViewById(R.id.buttonEuro);
         buttonWon = findViewById(R.id.buttonWon);
 
-        buttonConfig = findViewById(R.id.buttonConfig);
+        handler = new Handler();
 
-        buttonDollar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                convertCurrency(dollarRate);
-            }
-        });
-
-        buttonEuro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                convertCurrency(euroRate);
-            }
-        });
-
-        buttonWon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                convertCurrency(wonRate);
-            }
-        });
-
-        // 跳转到配置页面
-        buttonConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent configIntent = new Intent(Money.this, MainActivity2.class);
-                // 把当前汇率传给配置页面
-                configIntent.putExtra("dollar_rate", dollarRate);
-                configIntent.putExtra("euro_rate", euroRate);
-                configIntent.putExtra("won_rate", wonRate);
-
-                // 启动配置页面，并等待其返回结果
-                startActivityForResult(configIntent, REQUEST_CODE_CONFIG);
-            }
-        });
+        // 美元
+        buttonDollar.setOnClickListener(view -> fetchAndConvert("美元"));
+        // 欧元
+        buttonEuro.setOnClickListener(view -> fetchAndConvert("欧元"));
+        // 韩元
+        buttonWon.setOnClickListener(view -> fetchAndConvert("韩国元"));
     }
 
     /**
-     * 根据传入的汇率进行换算
+     * 获取网页汇率并计算兑换结果
      */
-    private void convertCurrency(float rate) {
-        String rmbStr = editTextRMB.getText().toString().trim();
-        if (rmbStr.isEmpty()) {
-            textViewResult.setText("请输入金额");
-            return;
-        }
+    private void fetchAndConvert(String currencyName) {
+        new Thread(() -> {
+            try {
+                Document doc = Jsoup.connect("https://www.boc.cn/sourcedb/whpj/").get();
+                Elements tables = doc.getElementsByTag("table");
 
-        float rmb = Float.parseFloat(rmbStr);
-        float result = rmb * rate;
-        textViewResult.setText(String.format("%.2f", result));
-    }
+                String rateStr = null;
 
-    /**
-     * 接收配置页面返回的数据
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+                for (Element table : tables) {
+                    Elements tds = table.getElementsByTag("td");
+                    for (int i = 0; i + 5 < tds.size(); i += 8) {
+                        String currency = tds.get(i).text();
+                        String rate = tds.get(i + 5).text(); // 中行折算价，一般为第6列
+                        if (currency.contains(currencyName)) {
+                            rateStr = rate;
+                            break;
+                        }
+                    }
+                    if (rateStr != null) break;
+                }
 
-        if (requestCode == REQUEST_CODE_CONFIG && resultCode == RESULT_OK) {
-            // 取出最新汇率
-            dollarRate = data.getFloatExtra("key_dollar_rate", 0.15f);
-            euroRate = data.getFloatExtra("key_euro_rate", 0.13f);
-            wonRate = data.getFloatExtra("key_won_rate", 165f);
-        }
+                if (rateStr == null) {
+                    handler.post(() -> textViewResult.setText("未找到 " + currencyName + " 汇率"));
+                    return;
+                }
+
+                String rmbStr = editTextRMB.getText().toString().trim();
+                if (rmbStr.isEmpty()) {
+                    handler.post(() -> textViewResult.setText("请输入人民币金额"));
+                    return;
+                }
+
+                float rmb = Float.parseFloat(rmbStr);
+                float rate = Float.parseFloat(rateStr);
+                float result = rmb * rate / 100;
+
+                String finalResult = String.format("当前%s汇率：%s\n%.2f 人民币 ≈ %.2f %s", currencyName, rateStr, rmb, result, currencyName);
+                handler.post(() -> textViewResult.setText(finalResult));
+
+            } catch (Exception e) {
+                handler.post(() -> textViewResult.setText("访问失败：" + e.getMessage()));
+            }
+        }).start();
     }
 }
