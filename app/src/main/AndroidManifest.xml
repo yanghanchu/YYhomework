@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapplicationx429as">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- 网络请求权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:theme="@style/Theme.AppCompat">
+        android:allowBackup="true"
+        android:theme="@style/Theme.AppCompat"
+        android:supportsRtl="true">
 
         <!-- Money 为启动页 -->
         <activity
@@ -15,22 +20,23 @@
             </intent-filter>
         </activity>
 
-        <!-- MainActivity2 用于配置或其它跳转，不作为启动页 -->
+        <!-- 汇率列表页（通过 WebView+Jsoup 抓取动态渲染后内容） -->
+        <activity
+            android:name=".MyListActivity"
+            android:exported="false" />
+
+        <!-- 其它页面，根据功能需求声明 -->
         <activity
             android:name=".MainActivity2"
-            android:exported="true" />
+            android:exported="false" />
 
-        <!-- Score 页面 -->
         <activity
             android:name=".Score"
-            android:exported="true" />
+            android:exported="false" />
 
-        <!-- MainActivity 页面 -->
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="false" />
 
     </application>
-
-
 </manifest>
