@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- ListView：用来显示“币种 => 汇率” -->
+    <!-- ListActivity 要求 id 为 @android:id/list -->
     <ListView
-        android:id="@+id/mylist"
+        android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</RelativeLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- id 为 @android:id/empty，ListActivity 会自动作为 EmptyView -->
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No Data"
+        android:gravity="center"
+        android:padding="24dp" />
+</LinearLayout>

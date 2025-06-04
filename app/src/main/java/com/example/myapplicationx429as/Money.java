@@ -14,12 +14,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public class Money extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
+public class Money extends AppCompatActivity {
     private EditText editTextRMB;
     private TextView textViewResult;
     private Button buttonDollar, buttonEuro, buttonWon, buttonConfig;
     private Handler handler;
+    private RateManager mgr;
+    private String today;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,54 +39,56 @@ public class Money extends AppCompatActivity {
         buttonConfig   = findViewById(R.id.buttonConfig);
         handler        = new Handler();
 
+        mgr = new RateManager(this);
+        today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                .format(new Date());
+
         Intent intent = getIntent();
         String currencyName = intent.getStringExtra("currency_name");
         String exchangeRate = intent.getStringExtra("exchange_rate");
-
         if (currencyName != null && exchangeRate != null) {
-            
             buttonDollar.setVisibility(View.GONE);
             buttonEuro.setVisibility(View.GONE);
             buttonWon.setVisibility(View.GONE);
-
-            textViewResult.setText(currencyName);
-
+            textViewResult.setText("当前汇率：" + exchangeRate);
             buttonConfig.setText("计算");
-            buttonConfig.setOnClickListener(v -> {
-                String rmbStr = editTextRMB.getText().toString().trim();
-                if (rmbStr.isEmpty()) {
-                    textViewResult.setText("请输入人民币金额");
-                    return;
-                }
-
-                try {
-                    float rmb = Float.parseFloat(rmbStr);
-                    float rate = Float.parseFloat(exchangeRate);
-                    float result = rmb * rate / 100f;
-
-                    String output = String.format("当前汇率：%s\n%.2f RMB ≈ %.2f %s",
-                            exchangeRate, rmb, result, currencyName);
-                    textViewResult.setText(output);
-                } catch (NumberFormatException e) {
-                    textViewResult.setText("汇率或金额格式错误");
-                }
-            });
+            buttonConfig.setOnClickListener(v ->
+                    convertAndShow(currencyName, Float.parseFloat(exchangeRate))
+            );
         } else {
-            // 原有按钮功能，点击后抓取汇率并计算
             buttonDollar.setOnClickListener(v -> fetchAndConvert("美元"));
             buttonEuro.setOnClickListener(v -> fetchAndConvert("欧元"));
             buttonWon.setOnClickListener(v -> fetchAndConvert("韩国元"));
-
-            // 跳转到列表页
-            buttonConfig.setOnClickListener(v -> {
-                Intent listIntent = new Intent(Money.this, MyListActivity.class);
-                startActivity(listIntent);
-            });
+            buttonConfig.setOnClickListener(v ->
+                    startActivity(new Intent(Money.this, MyListActivity.class))
+            );
         }
     }
 
-    // 原始 Jsoup 获取逻辑，支持按钮汇率转换
+    private void convertAndShow(String currencyName, float rate) {
+        String str = editTextRMB.getText().toString().trim();
+        if (str.isEmpty()) {
+            textViewResult.setText("请输入人民币金额");
+            return;
+        }
+        try {
+            float rmb = Float.parseFloat(str);
+            float res = rmb * rate / 100f;
+            String out = String.format(Locale.getDefault(),
+                    "当前汇率：%.2f\n%.2f RMB ≈ %.2f %s",
+                    rate, rmb, res, currencyName);
+            textViewResult.setText(out);
+        } catch (NumberFormatException e) {
+            textViewResult.setText("金额格式错误");
+        }
+    }
+
     private void fetchAndConvert(String currencyName) {
+        RateItem cached = mgr.find(currencyName, today);
+        if (cached != null) {
+            convertAndShow(currencyName, cached.getRate());
+            return;
+        }
         new Thread(() -> {
             try {
                 Document doc = Jsoup.connect("https://www.boc.cn/sourcedb/whpj/")
@@ -89,7 +96,6 @@ public class Money extends AppCompatActivity {
                         .timeout(10000)
                         .get();
                 Elements tds = doc.select("table").get(1).select("td");
-
                 String rateStr = null;
                 for (int i = 0; i + 5 < tds.size(); i += 8) {
                     if (tds.get(i).text().contains(currencyName)) {
@@ -97,27 +103,24 @@ public class Money extends AppCompatActivity {
                         break;
                     }
                 }
-
                 if (rateStr == null) {
-                    handler.post(() -> textViewResult.setText("未找到 " + currencyName + " 汇率"));
+                    handler.post(() ->
+                            textViewResult.setText("未找到 " + currencyName + " 汇率")
+                    );
                     return;
                 }
-
-                String rmbStr = editTextRMB.getText().toString().trim();
-                if (rmbStr.isEmpty()) {
-                    handler.post(() -> textViewResult.setText("请输入人民币金额"));
-                    return;
-                }
-
-                float rmb = Float.parseFloat(rmbStr);
                 float rate = Float.parseFloat(rateStr);
-                float res = rmb * rate / 100f;
-                String out = String.format("当前%s汇率：%s\n%.2f RMB ≈ %.2f %s",
-                        currencyName, rateStr, rmb, res, currencyName);
-                handler.post(() -> textViewResult.setText(out));
+                RateItem item = new RateItem();
+                item.setCurrencyName(currencyName);
+                item.setRate(rate);
+                item.setDate(today);
+                mgr.add(item);
 
+                handler.post(() -> convertAndShow(currencyName, rate));
             } catch (Exception e) {
-                handler.post(() -> textViewResult.setText("访问失败：" + e.getMessage()));
+                handler.post(() ->
+                        textViewResult.setText("访问失败：" + e.getMessage())
+                );
             }
         }).start();
     }
